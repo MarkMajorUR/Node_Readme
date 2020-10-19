@@ -94,13 +94,13 @@ function generateMarkdown(response) {
 ## License:
     For more information about the License, click the link below
 
-- [License](http://opensource.org/license/${response.license})
+- [License](http://opensource.org/licenses/${response.license})
 
 ## Questions: 
     For questions about the Readme generator go to my Github Page
     at the link below:
     
-- [Github Profile](https://github.com${response.username})    
+- [Github Profile](https://github.com/${response.username})    
 
 For more questions feel free to email me at: ${response.email}
 `;
