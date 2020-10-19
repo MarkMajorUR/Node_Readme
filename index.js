@@ -2,13 +2,14 @@ const inquirer = require("inquirer");
 const fs = require("fs");
 const util = require("util");
 
+
 const writeFileAsync = util.promisify(fs.writeFile);
 
 function promptUser() {
   return inquirer.prompt([
     {
       type: "input",
-      name: "Title",
+      name: "title",
       message: "What is the name of your project?"
     },
     {
@@ -28,53 +29,93 @@ function promptUser() {
     },
     {
       type: "input",
-      name: "github",
+      name: "test",
       message: "What are the Test Instructions"
     },
     {
+      type: "checkbox",
+      message: "Select a license.",
+      choices: [
+        "Apache",
+        "MIT",
+        "ISC",
+        "GNU GPLv3"
+      ],
+      name: "license",
+    },
+    {
       type: "input",
-      name: "linkedin",
-      message: "Enter your LinkedIn URL."
-    }
+      name: "credit",
+      message: "Whose credit is this work"
+    },
+    {
+      type: "input",
+      name: "username",
+      message: "What is your GitHub username"
+    },
+    {
+      type: "input",
+      name: "email",
+      message: "What is your email address"
+    },
   ]);
 }
 
-function generateHTML(answers) {
+function generateMarkdown(response) {
   return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <title>Document</title>
-</head>
-<body>
-  <div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">Hi! My name is ${answers.name}</h1>
-    <p class="lead">I am from ${answers.location}.</p>
-    <h3>Example heading <span class="badge badge-secondary">Contact Me</span></h3>
-    <ul class="list-group">
-      <li class="list-group-item">My GitHub username is ${answers.github}</li>
-      <li class="list-group-item">LinkedIn: ${answers.linkedin}</li>
-    </ul>
-  </div>
-</div>
-</body>
-</html>`;
+# ${response.title}
+
+# Table of Contents
+
+-[Description](#description)
+-[Installation](#installation)
+-[Usage](#usage)
+-[Contributing](#contributing)
+-[Test](#test)
+-[Credits](#credits)
+-[License](#license)
+-[Questions](#questions)
+
+
+## Description:
+![License](https://img.shields.io/badge/Licesnse-${response.license}-blue.svg "License Badge")
+
+    ${response.description}
+## Instalation:
+    ${response.installation}
+## Usage:
+    ${response.usage}
+## Contributing:
+    ${response.contribution}
+## Test:
+    ${response.test}
+## Credits:
+    ${response.credit}
+## License:
+    For more information about the License, click the link below
+
+- [License](http://opensource.org/license/${response.license})
+
+## Questions: 
+    For questions about the Readme generator go to my Github Page
+    at the link below:
+    
+- [Github Profile](https://github.com${response.username})    
+
+For more questions feel free to email me at: ${response.email}
+`;
 }
 
 async function init() {
-  console.log("hi")
+  
   try {
-    const answers = await promptUser();
+    const response = await promptUser();
 
-    const html = generateHTML(answers);
+    const readMe = generateMarkdown(response);
 
-    await writeFileAsync("index.html", html);
+    await writeFileAsync("README.md", readMe);
 
-    console.log("Successfully wrote to index.html");
+    console.log("Success");
   } catch(err) {
     console.log(err);
   }
