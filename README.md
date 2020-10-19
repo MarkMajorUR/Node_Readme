@@ -1,3 +1,7 @@
+# About this project
+I worked off code from activity 40 as a starting place and went from there. I enjoyed myself, not too difficult and hopefully it continues working. Adios
+
+
 
 # Readme generator
 
